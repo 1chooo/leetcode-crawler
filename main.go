@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/1chooo/leetcode-crawler/cmd"
+)
 
 func main() {
-	fmt.Println("Hello, LeetCode Crawler!")
+    cmd.Execute()
 }
