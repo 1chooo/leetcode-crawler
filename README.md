@@ -1,8 +1,10 @@
 # LeetCode Problems Crawler
 
-This project is inspired by [vv13/leetcode-problems-crawler](https://github.com/vv13/leetcode-problems-crawler).
+A Go CLI (Command Line Interface) tool to crawl LeetCode problems and generate code files in various programming languages with different naming schemes.
 
-## Usage
+## 📖 Usage
+
+pattern:
 
 ```go
 leetcode-crawler crawl --problem <problem_id> --lang <language> --path <output_path> --naming <naming_scheme>
@@ -48,8 +50,31 @@ To crawl problem 5 in Rust language with kebab-case naming scheme
 leetcode-crawler crawl --problem 5 --lang rust --path ./problems/ --naming kebab-case
 ```
 
+## 📱 Contact
+
+> **Chun-Ho (Hugo) Lin**
+> 
+> <aside>
+>   📩 E-mail: <a href="mailto:hugo970217@gmail.com">hugo970217@gmail.com</a>
+> <br>
+>   🧳 Linkedin: <a href="https://www.linkedin.com/in/1chooo/">in/1chooo</a>
+> <br>
+>   👨🏻‍💻 GitHub: <a href="https://github.com/1chooo">@1chooo</a>
+>    
+> </aside>
+
+
+## 🪪 License
+
+Released under [MIT](./LICENSE) by [@1chooo](https://www.1chooo.com)
+
+This software can be modified and reused without restriction. The original license must be included with any copies of this software. If a significant portion of the source code is used, please provide a link back to this repository.
+
+Made with 💙 by [@1chooo](https://www.1chooo.com)
+
+## 🙏🏻 Special Thanks
 
 - [Cobra](https://cobra.dev/)
 - [Build CLI Apps with Go and Cobra](https://www.jetbrains.com/guide/go/tutorials/cli-apps-go-cobra/)
-
+- [vv13/leetcode-problems-crawler](https://github.com/vv13/leetcode-problems-crawler)
 
