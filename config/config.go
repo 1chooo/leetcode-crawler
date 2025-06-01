@@ -1,11 +1,12 @@
 package config
 
 type Config struct {
-	CN       SiteConfig
-	EN       SiteConfig
-	Level    LevelMap
-	Language LanguageMap
-	naming   NamingMap
+	CN             SiteConfig
+	EN             SiteConfig
+	Level          LevelMap
+	Language       LanguageMap
+	Naming         NamingMap
+	QuestionDataQL func(titleSlug string) GraphQLRequest
 }
 
 var DefaultConfig = Config{
@@ -30,11 +31,39 @@ var DefaultConfig = Config{
 		Rust:       "Rust",
 		TypeScript: "TypeScript",
 	},
-	naming: NamingMap{
+	Naming: NamingMap{
 		SnakeCase:      "snake_case",
 		CamelCase:      "CamelCase",
 		LowerCamelCase: "lowerCamelCase",
 		UpperCamelCase: "UpperCamelCase",
 		KebabCase:      "kebab-case",
+	},
+	QuestionDataQL: func(titleSlug string) GraphQLRequest {
+		return GraphQLRequest{
+			OperationName: "questionData",
+			Query: `
+			query questionData($titleSlug: String!) {
+				question(titleSlug: $titleSlug) {
+					translatedTitle
+					translatedContent
+					content
+					similarQuestions
+					stats
+					hints
+					title
+					titleSlug
+					questionFrontendId
+					codeSnippets {
+						lang
+						langSlug
+						code
+						__typename
+					}
+				}
+			}`,
+			Variables: map[string]interface{}{
+				"titleSlug": titleSlug,
+			},
+		}
 	},
 }
