@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
 	"github.com/1chooo/leetcode-crawler/config"
 )
 
@@ -33,16 +34,16 @@ type SimilarQuestion struct {
 }
 
 // WriteDirectory creates a directory if it doesn't exist
-func WriteDirectory(dirname string) error {
-	if _, err := os.Stat(dirname); os.IsNotExist(err) {
-		return os.MkdirAll(dirname, 0755)
+func WriteDirectory(dirName string) error {
+	if _, err := os.Stat(dirName); os.IsNotExist(err) {
+		return os.MkdirAll(dirName, 0755)
 	}
 	return nil
 }
 
 // WriteQuestion writes the question README.md file
-func WriteQuestion(dirname string, questionConfig QuestionConfig) error {
-	filePath := filepath.Join(dirname, "README.md")
+func WriteQuestion(dirName string, questionConfig QuestionConfig) error {
+	filePath := filepath.Join(dirName, "README.md")
 	fmt.Printf("created: %s\n", filePath)
 
 	var fileContent strings.Builder
@@ -64,7 +65,7 @@ func WriteQuestion(dirname string, questionConfig QuestionConfig) error {
 }
 
 // WriteSolution writes the solution file with appropriate extension
-func WriteSolution(dirname string, langSlug string, code string, config config.Config) error {
+func WriteSolution(dirName string, langSlug string, code string, config config.Config) error {
 	// Map language slugs to file extensions
 	langExtMap := map[string]string{
 		"java":       ".java",
@@ -82,7 +83,7 @@ func WriteSolution(dirname string, langSlug string, code string, config config.C
 		ext = ".txt" // fallback extension
 	}
 
-	filePath := filepath.Join(dirname, "Solution"+ext)
+	filePath := filepath.Join(dirName, "Solution"+ext)
 
 	// Check if file already exists
 	if _, err := os.Stat(filePath); err == nil {
@@ -94,8 +95,8 @@ func WriteSolution(dirname string, langSlug string, code string, config config.C
 }
 
 // WriteInformation writes the information.json file
-func WriteInformation(dirname string, question map[string]interface{}, difficulty string) error {
-	filePath := filepath.Join(dirname, "information.json")
+func WriteInformation(dirName string, question map[string]interface{}, difficulty string) error {
+	filePath := filepath.Join(dirName, "information.json")
 
 	// Parse similar questions
 	var similarQuestions []SimilarQuestion

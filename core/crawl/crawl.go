@@ -88,11 +88,11 @@ func ProblemCrawler(ids []int, langSlugs []string) error {
 
 func processProblem(domain string, frontendID int, titleSlug string, difficultyLevel int, langSlugs []string, levelMap map[int]string) error {
 	// Create directory name with zero-padded ID
-	dirname := filepath.Join(".", fmt.Sprintf("%03d.%s", frontendID, titleSlug))
+	dirName := filepath.Join(".", fmt.Sprintf("%04d-%s", frontendID, titleSlug))
 
 	// Create directory
-	if err := file.WriteDirectory(dirname); err != nil {
-		return fmt.Errorf("failed to create directory %s: %w", dirname, err)
+	if err := file.WriteDirectory(dirName); err != nil {
+		return fmt.Errorf("failed to create directory %s: %w", dirName, err)
 	}
 
 	// Get question details
@@ -112,7 +112,7 @@ func processProblem(domain string, frontendID int, titleSlug string, difficultyL
 	}
 
 	// Write question README
-	if err := file.WriteQuestion(dirname, questionConfig); err != nil {
+	if err := file.WriteQuestion(dirName, questionConfig); err != nil {
 		return fmt.Errorf("failed to write question for %s: %w", titleSlug, err)
 	}
 
@@ -132,7 +132,7 @@ func processProblem(domain string, frontendID int, titleSlug string, difficultyL
 		}
 
 		// Write solution file
-		if err := file.WriteSolution(dirname, lang, snippet.Code, config.Config{}); err != nil {
+		if err := file.WriteSolution(dirName, lang, snippet.Code, config.Config{}); err != nil {
 			fmt.Printf("Warning: failed to write solution for %s in %s: %v\n", titleSlug, lang, err)
 		}
 	}
@@ -148,11 +148,11 @@ func processProblem(domain string, frontendID int, titleSlug string, difficultyL
 		difficulty = "Unknown"
 	}
 
-	if err := file.WriteInformation(dirname, questionData, difficulty); err != nil {
+	if err := file.WriteInformation(dirName, questionData, difficulty); err != nil {
 		return fmt.Errorf("failed to write information for %s: %w", titleSlug, err)
 	}
 
-	fmt.Printf("Successfully processed: %s\n", dirname)
+	fmt.Printf("Successfully processed: %s\n", dirName)
 	return nil
 }
 
