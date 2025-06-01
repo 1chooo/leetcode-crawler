@@ -63,3 +63,13 @@ type GraphQLRequest struct {
 	Query         string                 `json:"query"`
 	Variables     map[string]interface{} `json:"variables"`
 }
+
+type Pair struct {
+	Difficulty struct {
+		Level int `json:"level"`
+	} `json:"difficulty"`
+	Stat struct {
+		FrontendQuestionID int    `json:"frontend_question_id"`
+		QuestionTitleSlug  string `json:"question__title_slug"`
+	} `json:"stat"`
+}
