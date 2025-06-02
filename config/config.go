@@ -1,14 +1,5 @@
 package config
 
-type Config struct {
-	CN             Site
-	EN             Site
-	Level          LevelMap
-	Language       []Language
-	Naming         NamingMap
-	QuestionDataQL func(titleSlug string) GraphQLRequest
-}
-
 var DefaultConfig = Config{
 	CN: Site{
 		Domain: "https://leetcode-cn.com",
@@ -16,7 +7,7 @@ var DefaultConfig = Config{
 	EN: Site{
 		Domain: "https://leetcode.com",
 	},
-	Level: LevelMap{
+	Level: Level{
 		Easy:   1,
 		Medium: 2,
 		Hard:   3,
@@ -31,7 +22,7 @@ var DefaultConfig = Config{
 		{Lang: "Rust", LangSlug: "rust", LangExt: ".rs"},
 		{Lang: "TypeScript", LangSlug: "typescript", LangExt: ".ts"},
 	},
-	Naming: NamingMap{
+	Naming: Naming{
 		SnakeCase:      "snake_case",
 		CamelCase:      "CamelCase",
 		LowerCamelCase: "lowerCamelCase",

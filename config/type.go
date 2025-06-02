@@ -1,10 +1,19 @@
 package config
 
+type Config struct {
+	CN             Site
+	EN             Site
+	Level          Level
+	Language       []Language
+	Naming         Naming
+	QuestionDataQL func(titleSlug string) GraphQLRequest
+}
+
 type Site struct {
 	Domain string
 }
 
-type LevelMap struct {
+type Level struct {
 	Easy   int
 	Medium int
 	Hard   int
@@ -51,7 +60,7 @@ type LanguageMap struct {
 	TypeScript string
 }
 
-type NamingMap struct {
+type Naming struct {
 	SnakeCase      string
 	CamelCase      string
 	LowerCamelCase string
