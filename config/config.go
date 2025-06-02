@@ -1,8 +1,8 @@
 package config
 
 type Config struct {
-	CN             SiteConfig
-	EN             SiteConfig
+	CN             Site
+	EN             Site
 	Level          LevelMap
 	Language       []Language
 	Naming         NamingMap
@@ -10,10 +10,10 @@ type Config struct {
 }
 
 var DefaultConfig = Config{
-	CN: SiteConfig{
+	CN: Site{
 		Domain: "https://leetcode-cn.com",
 	},
-	EN: SiteConfig{
+	EN: Site{
 		Domain: "https://leetcode.com",
 	},
 	Level: LevelMap{

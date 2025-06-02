@@ -1,6 +1,6 @@
 package config
 
-type SiteConfig struct {
+type Site struct {
 	Domain string
 }
 
