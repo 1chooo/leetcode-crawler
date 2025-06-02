@@ -4,7 +4,7 @@ type Config struct {
 	CN             SiteConfig
 	EN             SiteConfig
 	Level          LevelMap
-	Language       LanguageMap
+	Language       []Language
 	Naming         NamingMap
 	QuestionDataQL func(titleSlug string) GraphQLRequest
 }
@@ -21,15 +21,15 @@ var DefaultConfig = Config{
 		Medium: 2,
 		Hard:   3,
 	},
-	Language: LanguageMap{
-		Java:       "Java",
-		JavaScript: "JavaScript",
-		Python3:    "Python3",
-		CPP:        "C++",
-		C:          "C",
-		Golang:     "Go",
-		Rust:       "Rust",
-		TypeScript: "TypeScript",
+	Language: []Language{
+		{Lang: "Java", LangSlug: "java", LangExt: ".java"},
+		{Lang: "JavaScript", LangSlug: "javascript", LangExt: ".js"},
+		{Lang: "Python3", LangSlug: "python3", LangExt: ".py"},
+		{Lang: "C++", LangSlug: "cpp", LangExt: ".cpp"},
+		{Lang: "C", LangSlug: "c", LangExt: ".c"},
+		{Lang: "Golang", LangSlug: "golang", LangExt: ".go"},
+		{Lang: "Rust", LangSlug: "rust", LangExt: ".rs"},
+		{Lang: "TypeScript", LangSlug: "typescript", LangExt: ".ts"},
 	},
 	Naming: NamingMap{
 		SnakeCase:      "snake_case",

@@ -10,6 +10,36 @@ type LevelMap struct {
 	Hard   int
 }
 
+type Language struct {
+	Lang     string
+	LangSlug string
+	LangExt  string
+}
+
+func GetSupportedLanguages() []Language {
+	return DefaultConfig.Language
+}
+
+func IsLanguageSupported(lang string) bool {
+	supportedLanguages := GetSupportedLanguages()
+	for _, language := range supportedLanguages {
+		if language.LangSlug == lang {
+			return true
+		}
+	}
+	return false
+}
+
+func GetLanguageByExtension(ext string) (string, bool) {
+	supportedLanguages := GetSupportedLanguages()
+	for _, language := range supportedLanguages {
+		if language.LangExt == ext {
+			return language.LangSlug, true
+		}
+	}
+	return "", false
+}
+
 type LanguageMap struct {
 	Java       string
 	JavaScript string
