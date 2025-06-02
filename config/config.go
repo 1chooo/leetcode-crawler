@@ -17,9 +17,9 @@ var DefaultConfig = Config{
 		Domain: "https://leetcode.com",
 	},
 	Level: LevelMap{
-		One:   "easy",
-		Two:   "medium",
-		Three: "hard",
+		Easy:   1,
+		Medium: 2,
+		Hard:   3,
 	},
 	Language: LanguageMap{
 		Java:       "Java",

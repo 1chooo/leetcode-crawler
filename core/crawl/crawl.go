@@ -51,13 +51,6 @@ func ProblemCrawler(ids []int, langSlugs []string) error {
 		idMap[id] = true
 	}
 
-	// Level map for difficulty conversion
-	levelMap := map[int]string{
-		1: "Easy",
-		2: "Medium",
-		3: "Hard",
-	}
-
 	// Use a WaitGroup to handle concurrent processing
 	var wg sync.WaitGroup
 
@@ -76,7 +69,7 @@ func ProblemCrawler(ids []int, langSlugs []string) error {
 		go func(fid int, slug string, level int) {
 			defer wg.Done()
 
-			if err := processProblem(domain, fid, slug, level, langSlugs, levelMap); err != nil {
+			if err := processProblem(domain, fid, slug, level, langSlugs); err != nil {
 				fmt.Printf("Error processing problem %d: %v\n", fid, err)
 			}
 		}(frontendID, titleSlug, difficultyLevel)
@@ -86,7 +79,7 @@ func ProblemCrawler(ids []int, langSlugs []string) error {
 	return nil
 }
 
-func processProblem(domain string, frontendID int, titleSlug string, difficultyLevel int, langSlugs []string, levelMap map[int]string) error {
+func processProblem(domain string, frontendID int, titleSlug string, difficultyLevel int, langSlugs []string) error {
 	// Create directory name with zero-padded ID
 	dirName := filepath.Join(".", fmt.Sprintf("%04d-%s", frontendID, titleSlug))
 
@@ -142,18 +135,30 @@ func processProblem(domain string, frontendID int, titleSlug string, difficultyL
 		"similarQuestions": question.SimilarQuestions,
 	}
 
-	// Write information.json
-	difficulty := levelMap[difficultyLevel]
-	if difficulty == "" {
-		difficulty = "Unknown"
-	}
+	// Convert difficulty level to string using config.DefaultConfig.Level
+	difficulty := getDifficultyString(difficultyLevel)
 
+	// Write information.json
 	if err := file.WriteInformation(dirName, questionData, difficulty); err != nil {
 		return fmt.Errorf("failed to write information for %s: %w", titleSlug, err)
 	}
 
 	fmt.Printf("Successfully processed: %s\n", dirName)
 	return nil
+}
+
+// getDifficultyString converts difficulty level integer to string using config.DefaultConfig.Level
+func getDifficultyString(level int) string {
+	switch level {
+	case config.DefaultConfig.Level.Easy:
+		return "Easy"
+	case config.DefaultConfig.Level.Medium:
+		return "Medium"
+	case config.DefaultConfig.Level.Hard:
+		return "Hard"
+	default:
+		return "Unknown"
+	}
 }
 
 // convertHintsToStringSlice converts the hints interface{} to []string

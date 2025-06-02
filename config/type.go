@@ -5,9 +5,9 @@ type SiteConfig struct {
 }
 
 type LevelMap struct {
-	One   string
-	Two   string
-	Three string
+	Easy   int
+	Medium int
+	Hard   int
 }
 
 type LanguageMap struct {
