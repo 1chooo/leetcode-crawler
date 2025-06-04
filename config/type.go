@@ -1,16 +1,16 @@
 package config
 
 type Config struct {
-	CN             Site
-	EN             Site
+	Domain         Domain
 	Level          Level
 	Language       []Language
 	Naming         Naming
 	QuestionDataQL func(titleSlug string) GraphQLRequest
 }
 
-type Site struct {
-	Domain string
+type Domain struct {
+	EN string
+	CN string
 }
 
 type Level struct {

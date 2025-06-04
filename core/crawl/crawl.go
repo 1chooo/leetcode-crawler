@@ -26,7 +26,7 @@ Example usage
 	}
 */
 func ProblemCrawler(ids []int, langSlugs []string) error {
-	domain := "https://leetcode.com"
+	domain := config.DefaultConfig.Domain.EN
 
 	// Get all problems
 	problemsData, err := helper.GetAllProblems(domain)

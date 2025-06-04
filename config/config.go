@@ -1,11 +1,9 @@
 package config
 
 var DefaultConfig = Config{
-	CN: Site{
-		Domain: "https://leetcode-cn.com",
-	},
-	EN: Site{
-		Domain: "https://leetcode.com",
+	Domain: Domain{
+		EN: "https://leetcode.com",
+		CN: "https://leetcode-cn.com",
 	},
 	Level: Level{
 		Easy:   1,
@@ -24,7 +22,6 @@ var DefaultConfig = Config{
 	},
 	Naming: Naming{
 		SnakeCase:      "snake_case",
-		CamelCase:      "CamelCase",
 		LowerCamelCase: "lowerCamelCase",
 		UpperCamelCase: "UpperCamelCase",
 		KebabCase:      "kebab-case",
