@@ -4,7 +4,7 @@ type Config struct {
 	Domain         Domain
 	Level          Level
 	Language       []Language
-	Naming         Naming
+	NamingConvention         NamingConvention
 	QuestionDataQL func(titleSlug string) GraphQLRequest
 }
 
@@ -14,9 +14,10 @@ type Domain struct {
 }
 
 type Level struct {
-	Easy   int
-	Medium int
-	Hard   int
+	Easy    int
+	Medium  int
+	Hard    int
+	Unknown int
 }
 
 type Language struct {
@@ -60,7 +61,7 @@ type LanguageMap struct {
 	TypeScript string
 }
 
-type Naming struct {
+type NamingConvention struct {
 	SnakeCase      string
 	CamelCase      string
 	LowerCamelCase string

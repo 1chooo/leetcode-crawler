@@ -6,9 +6,10 @@ var DefaultConfig = Config{
 		CN: "https://leetcode-cn.com",
 	},
 	Level: Level{
-		Easy:   1,
-		Medium: 2,
-		Hard:   3,
+		Easy:    1,
+		Medium:  2,
+		Hard:    3,
+		Unknown: 0,
 	},
 	Language: []Language{
 		{Lang: "Java", LangSlug: "java", LangExt: ".java"},
@@ -20,7 +21,7 @@ var DefaultConfig = Config{
 		{Lang: "Rust", LangSlug: "rust", LangExt: ".rs"},
 		{Lang: "TypeScript", LangSlug: "typescript", LangExt: ".ts"},
 	},
-	Naming: Naming{
+	NamingConvention: NamingConvention{
 		SnakeCase:      "snake_case",
 		LowerCamelCase: "lowerCamelCase",
 		UpperCamelCase: "UpperCamelCase",
