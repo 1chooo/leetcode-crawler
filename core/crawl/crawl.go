@@ -17,13 +17,11 @@ type AllProblemsResponse struct {
 }
 
 /*
-Example usage
+ProblemCrawler fetches problem data from LeetCode and writes it to the local filesystem.
 
-	func main() {
-		ids := []int{1, 2, 3, 4, 5}
-		langSlugs := []string{"java", "python3", "cpp", "c", "golang", "rust", "typescript"}
-		ProblemCrawler(ids, langSlugs)
-	}
+Example usage:
+
+	ProblemCrawler([]int{1, 2, 3}, []string{"python3", "java"})
 */
 func ProblemCrawler(ids []int, langSlugs []string) error {
 	domain := config.DefaultConfig.Domain.EN

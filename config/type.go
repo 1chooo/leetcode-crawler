@@ -1,11 +1,11 @@
 package config
 
 type Config struct {
-	Domain         Domain
-	Level          Level
-	Language       []Language
-	NamingConvention         NamingConvention
-	QuestionDataQL func(titleSlug string) GraphQLRequest
+	Domain           Domain
+	Level            Level
+	Language         []Language
+	NamingConvention NamingConvention
+	QuestionDataQL   func(titleSlug string) GraphQLRequest
 }
 
 type Domain struct {
