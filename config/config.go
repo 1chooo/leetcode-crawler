@@ -56,3 +56,69 @@ var DefaultConfig = Config{
 		}
 	},
 }
+
+func GetDefaultConfig() Config {
+	return DefaultConfig
+}
+
+func GetDomain(isCN bool) string {
+	if isCN {
+		return DefaultConfig.Domain.CN
+	}
+	return DefaultConfig.Domain.EN
+}
+
+func GetLevel(level string) int {
+	switch level {
+	case "easy":
+		return DefaultConfig.Level.Easy
+	case "medium":
+		return DefaultConfig.Level.Medium
+	case "hard":
+		return DefaultConfig.Level.Hard
+	default:
+		return DefaultConfig.Level.Unknown
+	}
+}
+
+func GetLanguageExt(langSlug string) (string, bool) {
+	for _, lang := range DefaultConfig.Language {
+		if lang.LangSlug == langSlug {
+			return lang.LangExt, true
+		}
+	}
+	return "", false
+}
+
+func GetLanguageBySlug(langSlug string) (Language, bool) {
+	for _, lang := range DefaultConfig.Language {
+		if lang.LangSlug == langSlug {
+			return lang, true
+		}
+	}
+	return Language{}, false
+}
+
+func GetLanguageByName(langName string) (Language, bool) {
+	for _, lang := range DefaultConfig.Language {
+		if lang.Lang == langName {
+			return lang, true
+		}
+	}
+	return Language{}, false
+}
+
+func GetNamingConvention(convention string) string {
+	switch convention {
+	case "snake_case":
+		return DefaultConfig.NamingConvention.SnakeCase
+	case "lowerCamelCase":
+		return DefaultConfig.NamingConvention.LowerCamelCase
+	case "upperCamelCase":
+		return DefaultConfig.NamingConvention.UpperCamelCase
+	case "kebab-case":
+		return DefaultConfig.NamingConvention.KebabCase
+	default:
+		return ""
+	}
+}
