@@ -3,10 +3,10 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strconv"
-	"strings"
 
+	"github.com/1chooo/leetcode-crawler/config"
 	"github.com/1chooo/leetcode-crawler/core/crawl"
+	"github.com/1chooo/leetcode-crawler/internal/parse"
 	"github.com/spf13/cobra"
 )
 
@@ -21,21 +21,22 @@ var crawlCmd = &cobra.Command{
 		problemFlag, _ := cmd.Flags().GetString("problem")
 		langFlag, _ := cmd.Flags().GetString("lang")
 		pathFlag, _ := cmd.Flags().GetString("path")
+		namingFlag, _ := cmd.Flags().GetString("naming")
+		naming := config.NormalizeNamingConvention(namingFlag)
 
-		// Parse problem IDs
-		problemIDs, err := parseProblemIDs(problemFlag)
+		problemIDs, err := parse.ProblemIDs(problemFlag)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing problem IDs: %v\n", err)
 			os.Exit(1)
 		}
 
-		// Parse languages
-		languages := parseLanguages(langFlag)
+		languages := parse.Languages(langFlag)
 
 		// Display what we're about to crawl
 		fmt.Printf("Crawling problems: %v\n", problemIDs)
 		fmt.Printf("Languages: %v\n", languages)
 		fmt.Printf("Output path: %s\n", pathFlag)
+		fmt.Printf("Directory naming: %s\n", naming)
 
 		// Change to the specified directory if needed
 		if pathFlag != "./" && pathFlag != "" {
@@ -50,87 +51,13 @@ var crawlCmd = &cobra.Command{
 		}
 
 		// Call the crawler
-		if err := crawl.ProblemCrawler(problemIDs, languages); err != nil {
+		if err := crawl.ProblemCrawler(problemIDs, languages, naming); err != nil {
 			fmt.Fprintf(os.Stderr, "Error crawling problems: %v\n", err)
 			os.Exit(1)
 		}
 
 		fmt.Println("Crawling completed successfully!")
 	},
-}
-
-// parseProblemIDs parses the problem flag and returns a slice of problem IDs
-func parseProblemIDs(problemFlag string) ([]int, error) {
-	var ids []int
-
-	// Handle range format (e.g., "1-5")
-	if strings.Contains(problemFlag, "-") {
-		parts := strings.Split(problemFlag, "-")
-		if len(parts) != 2 {
-			return nil, fmt.Errorf("invalid range format: %s (expected format: start-end)", problemFlag)
-		}
-
-		start, err := strconv.Atoi(strings.TrimSpace(parts[0]))
-		if err != nil {
-			return nil, fmt.Errorf("invalid start number in range: %s", parts[0])
-		}
-
-		end, err := strconv.Atoi(strings.TrimSpace(parts[1]))
-		if err != nil {
-			return nil, fmt.Errorf("invalid end number in range: %s", parts[1])
-		}
-
-		if start > end {
-			return nil, fmt.Errorf("start number (%d) cannot be greater than end number (%d)", start, end)
-		}
-
-		for i := start; i <= end; i++ {
-			ids = append(ids, i)
-		}
-	} else {
-		// Handle single number or comma-separated numbers
-		problemStrs := strings.Split(problemFlag, ",")
-		for _, problemStr := range problemStrs {
-			problemStr = strings.TrimSpace(problemStr)
-			if problemStr == "" {
-				continue
-			}
-
-			id, err := strconv.Atoi(problemStr)
-			if err != nil {
-				return nil, fmt.Errorf("invalid problem number: %s", problemStr)
-			}
-			ids = append(ids, id)
-		}
-	}
-
-	if len(ids) == 0 {
-		return nil, fmt.Errorf("no valid problem IDs found")
-	}
-
-	return ids, nil
-}
-
-// parseLanguages parses the language flag and returns a slice of language slugs
-func parseLanguages(langFlag string) []string {
-	// Split by comma and clean up
-	langs := strings.Split(langFlag, ",")
-	var result []string
-
-	for _, lang := range langs {
-		lang = strings.TrimSpace(lang)
-		if lang != "" {
-			// Convert to lowercase for consistency with LeetCode API
-			result = append(result, strings.ToLower(lang))
-		}
-	}
-
-	// If no languages specified, default to python3
-	if len(result) == 0 {
-		result = []string{"python3"}
-	}
-
-	return result
 }
 
 func init() {
@@ -146,6 +73,6 @@ func init() {
 
 	crawlCmd.Flags().StringP("lang", "l", "python3", "Programming language to use (default: python3)")
 	crawlCmd.Flags().StringP("path", "d", "./problems/", "Directory to save the crawled problems")
-	crawlCmd.Flags().StringP("naming", "n", "kebab-case", "Naming convention for the problem files (default: kebab-case)")
+	crawlCmd.Flags().StringP("naming", "n", "kebab-case", "Directory name style: kebab-case, snake_case, camelCase, pascalCase")
 	rootCmd.AddCommand(crawlCmd)
 }

@@ -9,7 +9,12 @@ import (
 	"net/http"
 )
 
-func GetAllProblems(domain string) (interface{}, error) {
+// AllProblemsResponse is the JSON body from GET /api/problems/all/.
+type AllProblemsResponse struct {
+	StatStatusPairs []config.Pair `json:"stat_status_pairs"`
+}
+
+func GetAllProblems(domain string) (*AllProblemsResponse, error) {
 	resp, err := http.Get(domain + "/api/problems/all/")
 	if err != nil {
 		return nil, err
@@ -21,12 +26,12 @@ func GetAllProblems(domain string) (interface{}, error) {
 		return nil, err
 	}
 
-	var result interface{}
-	if err := json.Unmarshal(body, &result); err != nil {
+	var out AllProblemsResponse
+	if err := json.Unmarshal(body, &out); err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	return &out, nil
 }
 
 /*

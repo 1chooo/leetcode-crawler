@@ -64,23 +64,11 @@ func WriteQuestion(dirName string, questionConfig QuestionConfig) error {
 	return os.WriteFile(filePath, []byte(fileContent.String()), 0644)
 }
 
-// WriteSolution writes the solution file with appropriate extension
-func WriteSolution(dirName string, langSlug string, code string, config config.Config) error {
-	// Map language slugs to file extensions
-	langExtMap := map[string]string{
-		"java":       ".java",
-		"javascript": ".js",
-		"python3":    ".py",
-		"cpp":        ".cpp",
-		"c":          ".c",
-		"golang":     ".go",
-		"rust":       ".rs",
-		"typescript": ".ts",
-	}
-
-	ext, exists := langExtMap[strings.ToLower(langSlug)]
-	if !exists {
-		ext = ".txt" // fallback extension
+// WriteSolution writes the solution file with appropriate extension (basename Solution.<ext>).
+func WriteSolution(dirName string, langSlug string, code string) error {
+	ext, ok := config.GetLanguageExt(config.NormalizeLangSlug(langSlug))
+	if !ok {
+		ext = ".txt"
 	}
 
 	filePath := filepath.Join(dirName, "Solution"+ext)
@@ -141,27 +129,11 @@ func WriteInformation(dirName string, question map[string]interface{}, difficult
 	return os.WriteFile(filePath, jsonBytes, 0644)
 }
 
-// Helper function to get language extension from config
-func GetLanguageExtension(langSlug string, config config.Config) string {
-	// You can extend this based on your specific needs
-	switch strings.ToLower(langSlug) {
-	case "java":
-		return ".java"
-	case "javascript":
-		return ".js"
-	case "python3":
-		return ".py"
-	case "cpp":
-		return ".cpp"
-	case "c":
-		return ".c"
-	case "golang", "go":
-		return ".go"
-	case "rust":
-		return ".rs"
-	case "typescript":
-		return ".ts"
-	default:
+// LanguageFileExtension returns the file extension for a LeetCode language slug (e.g. golang -> .go).
+func LanguageFileExtension(langSlug string) string {
+	ext, ok := config.GetLanguageExt(config.NormalizeLangSlug(langSlug))
+	if !ok {
 		return ".txt"
 	}
+	return ext
 }

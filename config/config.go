@@ -1,5 +1,7 @@
 package config
 
+import "strings"
+
 var DefaultConfig = Config{
 	Domain: Domain{
 		EN: "https://leetcode.com",
@@ -90,6 +92,15 @@ func GetLanguageExt(langSlug string) (string, bool) {
 	return "", false
 }
 
+// NormalizeLangSlug maps common CLI aliases to LeetCode API slugs.
+func NormalizeLangSlug(langSlug string) string {
+	s := strings.ToLower(strings.TrimSpace(langSlug))
+	if s == "go" {
+		return "golang"
+	}
+	return s
+}
+
 func GetLanguageBySlug(langSlug string) (Language, bool) {
 	for _, lang := range DefaultConfig.Language {
 		if lang.LangSlug == langSlug {
@@ -120,5 +131,26 @@ func GetNamingConvention(convention string) string {
 		return DefaultConfig.NamingConvention.KebabCase
 	default:
 		return ""
+	}
+}
+
+// NormalizeNamingConvention maps CLI / README variants to the canonical naming value used in DefaultConfig.
+// Unknown values default to kebab-case.
+func NormalizeNamingConvention(convention string) string {
+	c := strings.TrimSpace(strings.ToLower(strings.ReplaceAll(convention, "_", "")))
+	switch c {
+	case "snakecase":
+		return DefaultConfig.NamingConvention.SnakeCase
+	case "lowercamelcase", "camelcase":
+		return DefaultConfig.NamingConvention.LowerCamelCase
+	case "uppercamelcase", "pascalcase":
+		return DefaultConfig.NamingConvention.UpperCamelCase
+	case "kebabcase", "kebab-case":
+		return DefaultConfig.NamingConvention.KebabCase
+	default:
+		if v := GetNamingConvention(convention); v != "" {
+			return v
+		}
+		return DefaultConfig.NamingConvention.KebabCase
 	}
 }

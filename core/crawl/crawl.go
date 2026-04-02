@@ -11,36 +11,20 @@ import (
 	"github.com/1chooo/leetcode-crawler/core/helper"
 )
 
-// AllProblemsResponse represents the structure of the API response
-type AllProblemsResponse struct {
-	StatStatusPairs []config.Pair `json:"stat_status_pairs"`
-}
-
 /*
 ProblemCrawler fetches problem data from LeetCode and writes it to the local filesystem.
 
 Example usage:
 
-	ProblemCrawler([]int{1, 2, 3}, []string{"python3", "java"})
+	ProblemCrawler([]int{1, 2, 3}, []string{"python3", "java"}, "kebab-case")
 */
-func ProblemCrawler(ids []int, langSlugs []string) error {
+func ProblemCrawler(ids []int, langSlugs []string, namingConvention string) error {
 	domain := config.DefaultConfig.Domain.EN
 
 	// Get all problems
-	problemsData, err := helper.GetAllProblems(domain)
+	problems, err := helper.GetAllProblems(domain)
 	if err != nil {
 		return fmt.Errorf("failed to get all problems: %w", err)
-	}
-
-	// Convert interface{} to proper struct
-	problemsJSON, err := json.Marshal(problemsData)
-	if err != nil {
-		return fmt.Errorf("failed to marshal problems data: %w", err)
-	}
-
-	var problems AllProblemsResponse
-	if err := json.Unmarshal(problemsJSON, &problems); err != nil {
-		return fmt.Errorf("failed to unmarshal problems data: %w", err)
 	}
 
 	// Create a map for quick ID lookup
@@ -67,7 +51,7 @@ func ProblemCrawler(ids []int, langSlugs []string) error {
 		go func(fid int, slug string, level int) {
 			defer wg.Done()
 
-			if err := processProblem(domain, fid, slug, level, langSlugs); err != nil {
+			if err := processProblem(domain, fid, slug, level, langSlugs, namingConvention); err != nil {
 				fmt.Printf("Error processing problem %d: %v\n", fid, err)
 			}
 		}(frontendID, titleSlug, difficultyLevel)
@@ -77,9 +61,9 @@ func ProblemCrawler(ids []int, langSlugs []string) error {
 	return nil
 }
 
-func processProblem(domain string, frontendID int, titleSlug string, difficultyLevel int, langSlugs []string) error {
-	// Create directory name with zero-padded ID
-	dirName := filepath.Join(".", fmt.Sprintf("%04d-%s", frontendID, titleSlug))
+func processProblem(domain string, frontendID int, titleSlug string, difficultyLevel int, langSlugs []string, namingConvention string) error {
+	dirSlug := file.FormatDirectorySlug(titleSlug, namingConvention)
+	dirName := filepath.Join(".", fmt.Sprintf("%04d-%s", frontendID, dirSlug))
 
 	// Create directory
 	if err := file.WriteDirectory(dirName); err != nil {
@@ -123,7 +107,7 @@ func processProblem(domain string, frontendID int, titleSlug string, difficultyL
 		}
 
 		// Write solution file
-		if err := file.WriteSolution(dirName, lang, snippet.Code, config.Config{}); err != nil {
+		if err := file.WriteSolution(dirName, lang, snippet.Code); err != nil {
 			fmt.Printf("Warning: failed to write solution for %s in %s: %v\n", titleSlug, lang, err)
 		}
 	}
